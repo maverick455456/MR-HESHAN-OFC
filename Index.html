@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="si">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MR HESHAN OFC / TECH-WEB</title>
+<style>
+  :root{
+    --bg:#0a0a0f;
+    --glass-bg: rgba(255,255,255,0.06);
+    --glass-strong: rgba(255,255,255,0.08);
+    --accent1:#ff3b6b;
+    --accent2:#7b5cff;
+    --accent3:#00e1ff;
+    --muted:#c7c7d0;
+    --card-w:360px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{
+    font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial;
+    background:
+      radial-gradient(1200px 700px at 10% 10%, rgba(123,92,255,0.06), transparent 6%),
+      radial-gradient(900px 600px at 90% 90%, rgba(0,225,255,0.04), transparent 8%),
+      var(--bg);
+    color:#f4f4f7;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:36px 18px;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* TOP BAR */
+  .topbar{
+    position:fixed;
+    left:50%;
+    transform:translateX(-50%);
+    top:12px;
+    z-index:120;
+    width:clamp(320px,88vw,1200px);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:8px 12px;
+    gap:12px;
+    border-radius:12px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border:1px solid rgba(255,255,255,0.04);
+    backdrop-filter: blur(6px) saturate(130%);
+    box-shadow:0 8px 30px rgba(0,0,0,0.6);
+  }
+  .branding{display:flex;gap:12px;align-items:center}
+  .brand-avatar{width:40px;height:40px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,0.06)}
+  .brand-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+  .brand-title{font-weight:800;font-size:14px;background:linear-gradient(90deg,var(--accent1),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .brand-sub{font-size:11px;color:var(--muted);margin-top:2px}
+
+  /* menu button container */
+  .controls{display:flex;align-items:center;gap:10px}
+
+  /* Hamburger / Animated button */
+  .menu-btn{
+    --size:44px;
+    width:var(--size);
+    height:var(--size);
+    border-radius:10px;
+    display:inline-grid;
+    place-items:center;
+    position:relative;
+    cursor:pointer;
+    border:1px solid rgba(255,255,255,0.03);
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.12));
+    transition:transform .18s ease;
+  }
+  .menu-btn:active{transform:scale(.98)}
+  .hamburger{
+    width:22px;height:18px;position:relative;
+    display:block;
+  }
+  .hamburger .bar{
+    position:absolute;
+    left:0;right:0;height:2px;border-radius:2px;
+    background:linear-gradient(90deg,var(--accent1),var(--accent3));
+    transition: transform .45s cubic-bezier(.2,.85,.2,1), opacity .25s ease, top .45s cubic-bezier(.2,.85,.2,1);
+  }
+  .hamburger .bar.b1{top:0}
+  .hamburger .bar.b2{top:8px}
+  .hamburger .bar.b3{top:16px}
+
+  /* When active -> morph into X with cut-circle reveal triggered separately */
+  .menu-btn.open .hamburger .b1{transform: translateY(8px) rotate(45deg)}
+  .menu-btn.open .hamburger .b2{opacity:0; transform:scaleX(.2)}
+  .menu-btn.open .hamburger .b3{transform: translateY(-8px) rotate(-45deg)}
+
+  /* MAIN CARD (profile) */
+  .main-card{
+    width:var(--card-w);
+    max-width:92vw;
+    margin-top:84px;
+    padding:20px;
+    border-radius:14px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border:1px solid rgba(255,255,255,0.03);
+    box-shadow:0 10px 40px rgba(0,0,0,0.6);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:12px;
+    backdrop-filter: blur(8px) saturate(120%);
+  }
+
+  .profile-ring{
+    width:220px;height:220px;position:relative;display:grid;place-items:center;margin-top:6px;
+  }
+  .profile-ring .ring{
+    position:absolute;inset:0;border-radius:50%;
+    padding:8px;
+    background: conic-gradient(from 120deg, var(--accent1), var(--accent2), var(--accent3), var(--accent1));
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 24px), black calc(100% - 24px));
+    mask: radial-gradient(farthest-side, transparent calc(100% - 24px), black calc(100% - 24px));
+    animation:spin 6s linear infinite;
+    filter: drop-shadow(0 12px 40px rgba(0,0,0,0.6));
+  }
+  @keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+
+  .profile-pic{
+    width:150px;height:150px;border-radius:50%;object-fit:cover;border:6px solid rgba(10,10,10,0.75);
+    z-index:2;background:linear-gradient(180deg,#111,#0b0b0b);
+  }
+
+  h1{margin:6px 0 0 0;font-size:20px;text-align:center;line-height:1.05}
+  .subtitle{color:var(--muted);font-size:13px;text-align:center;margin-top:6px}
+
+  .btns{width:100%;display:flex;flex-direction:column;gap:10px;margin-top:6px}
+  .btns a{display:inline-flex;justify-content:center;align-items:center;padding:11px 12px;border-radius:10px;text-decoration:none;font-weight:700;color:#071426;background:linear-gradient(90deg,var(--accent3),var(--accent2));box-shadow:0 6px 20px rgba(0,0,0,0.4)}
+  .typing{margin-top:12px;font-size:14px;color:var(--muted);background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.02);text-align:center;min-height:64px}
+
+  /* GLASS MENU (circular cut reveal) */
+  .menu-panel{
+    position:fixed;
+    top:10px;right:10px;
+    width:360px;height:360px;
+    pointer-events:none; /* until open */
+    z-index:110;
+    display:grid;
+    place-items:center;
+    transition:opacity .35s ease;
+  }
+
+  /* the circular mask element that expands */
+  .menu-panel .mask{
+    position:absolute;
+    right:12px;top:12px;
+    width:56px;height:56px;border-radius:50%;
+    background: radial-gradient(circle at 40% 30%, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+    box-shadow:0 8px 30px rgba(0,0,0,0.45);
+    transition: transform .55s cubic-bezier(.12,.82,.18,1), width .45s ease, height .45s ease;
+    z-index:10;
+    pointer-events:auto;
+  }
+
+  /* the menu content which is clipped by circle using clip-path */
+  .menu-panel .panel{
+    position:relative;
+    width:100%;
+    max-width:420px;
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    pointer-events:none;
+  }
+  .menu-inner{
+    width:320px;
+    max-width:92vw;
+    padding:28px;
+    border-radius:14px;
+    backdrop-filter: blur(8px) saturate(130%);
+    -webkit-backdrop-filter: blur(8px);
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+    border:1px solid rgba(255,255,255,0.04);
+    box-shadow:0 18px 50px rgba(0,0,0,0.6);
+    opacity:0;
+    transform:translateY(6px) scale(.98);
+    transition:opacity .42s ease .06s, transform .42s cubic-bezier(.2,.9,.2,1) .06s;
+    pointer-events:auto;
+  }
+
+  .menu-inner nav{display:flex;flex-direction:column;gap:14px}
+  .menu-item{
+    color:var(--text);
+    font-weight:700;
+    font-size:18px;
+    text-decoration:none;
+    display:flex;align-items:center;gap:12px;
+    padding:8px 10px;border-radius:8px;
+    transition:transform .25s ease, background .18s;
+  }
+  .menu-item .dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(90deg,var(--accent1),var(--accent2))}
+  .menu-item:hover{transform:translateX(6px);background:rgba(255,255,255,0.02)}
+
+  .social-row{margin-top:8px;display:flex;gap:10px;flex-wrap:wrap}
+  .social-link{padding:8px 10px;border-radius:8px;background:linear-gradient(90deg,var(--accent3),var(--accent2));color:#071426;font-weight:800;text-decoration:none}
+
+  /* OPEN STATE STYLES */
+  .menu-panel.open{pointer-events:auto;opacity:1}
+  .menu-panel.open .mask{
+    /* expand mask drastically to act like circular reveal */
+    transform: none;
+    width:1600px;height:1600px; /* large enough to cover viewport */
+    transition: width .64s cubic-bezier(.12,.82,.18,1), height .64s cubic-bezier(.12,.82,.18,1);
+  }
+  .menu-panel.open .menu-inner{opacity:1;transform:translateY(0) scale(1);transition-delay:.18s}
+
+  /* menu button visual sync */
+  .menu-btn.open{box-shadow:0 8px 30px rgba(0,0,0,0.45);}
+
+  /* item stagger */
+  .menu-inner nav a{opacity:0;transform:translateY(8px)}
+  .menu-panel.open .menu-inner nav a{opacity:1;transform:none}
+  .menu-inner nav a:nth-child(1){transition: all .35s ease .18s}
+  .menu-inner nav a:nth-child(2){transition: all .35s ease .26s}
+  .menu-inner nav a:nth-child(3){transition: all .35s ease .34s}
+  .menu-inner nav a:nth-child(4){transition: all .35s ease .42s}
+
+  /* small devices */
+  @media (max-width:420px){
+    .menu-panel{right:6px;top:6px;width:320px;height:320px}
+    .menu-inner{width:86vw;padding:18px}
+    :root{--card-w:340px}
+  }
+</style>
+</head>
+<body>
+
+  <!-- Top bar -->
+  <header class="topbar" role="banner">
+    <div class="branding">
+      <div class="brand-avatar" title="Heshan">
+        <img src="https://files.catbox.moe/nhrp9a.jpg" alt="Heshan avatar">
+      </div>
+      <div>
+        <div class="brand-title">MR HESHAN OFC / TECH-WEB</div>
+        <div class="brand-sub">Full-Stack · UI/UX · Dev</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button id="menuBtn" class="menu-btn" aria-expanded="false" aria-controls="mainMenu" aria-label="Open menu">
+        <span class="hamburger" aria-hidden="true">
+          <span class="bar b1"></span>
+          <span class="bar b2"></span>
+          <span class="bar b3"></span>
+        </span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main profile card -->
+  <main class="main-card" role="main" aria-labelledby="profileName">
+    <div class="profile-ring" aria-hidden="false">
+      <div class="ring" aria-hidden="true"></div>
+      <img class="profile-pic" src="https://files.catbox.moe/nhrp9a.jpg" alt="Profile photo of Heshan">
+    </div>
+    <h1 id="profileName">MR HESHAN OFC / TECH-WEB</h1>
+    <div class="subtitle">Full-Stack Developer · UI/UX Designer · Tech Enthusiast</div>
+    <div class="btns" role="navigation" aria-label="Quick links">
+      <a href="https://wa.me/94719845166" target="_blank" rel="noopener">WhatsApp</a>
+      <a href="https://youtube.com/@heshan_dh?si=7FTKlwZuo3_nU4Ss" target="_blank" rel="noopener">YouTube Channel</a>
+      <a href="https://t.me/94719845166" target="_blank" rel="noopener">Telegram</a>
+    </div>
+
+    <div class="typing" id="typing" aria-live="polite"></div>
+  </main>
+
+  <!-- Glass menu with circular cut reveal -->
+  <div id="mainMenu" class="menu-panel" aria-hidden="true">
+    <div class="mask" id="maskHandle" aria-hidden="true"></div>
+    <div class="panel" role="dialog" aria-label="Main Menu">
+      <div class="menu-inner" role="menu" aria-labelledby="menuBtn">
+        <nav>
+          <a class="menu-item" href="#home" role="menuitem"><span class="dot" aria-hidden="true"></span>Home</a>
+          <a class="menu-item" href="#about" role="menuitem"><span class="dot" aria-hidden="true"></span>About</a>
+          <a class="menu-item" href="#profile" role="menuitem"><span class="dot" aria-hidden="true"></span>Profile</a>
+          <a class="menu-item" href="#social" role="menuitem"><span class="dot" aria-hidden="true"></span>Social Media</a>
+        </nav>
+
+        <div class="social-row" aria-hidden="false">
+          <a class="social-link" target="_blank" rel="noopener" href="https://www.facebook.com/share/16vrFNkC8T/">Facebook</a>
+          <a class="social-link" target="_blank" rel="noopener" href="https://vt.tiktok.com/ZSyEs3qbT/">TikTok</a>
+          <a class="social-link" target="_blank" rel="noopener" href="https://youtube.com/@heshan_dh?si=7FTKlwZuo3_nU4Ss">YouTube</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // Typing effect
+  (function(){
+    const lines = [
+      "Name: Dinidu Heshan",
+      "නම : දිනිදු හේෂාන්🧚‍♂️",
+      "From: Embilipitiya✨",
+      "නගරය: ඇඹිලිපිටිය💐",
+      "Age: 18 🕊️",
+      "වයස: 18"
+    ];
+    let li=0, ci=0;
+    const el=document.getElementById('typing');
+    const speed=60;
+    function type(){
+      const cur=lines[li];
+      el.textContent = cur.substring(0, ci);
+      if(ci < cur.length){ ci++; setTimeout(type, speed); }
+      else { ci=0; li=(li+1)%lines.length; setTimeout(type, 900); }
+    }
+    // start after small delay for nicer visual
+    setTimeout(type, 800);
+  })();
+
+  // Menu open + circular cut reveal + hamburger anim
+  (function(){
+    const btn = document.getElementById('menuBtn');
+    const panel = document.getElementById('mainMenu');
+    const mask = document.getElementById('maskHandle');
+
+    let open=false;
+
+    function openMenu(){
+      open=true;
+      btn.classList.add('open');
+      btn.setAttribute('aria-expanded','true');
+      panel.classList.add('open');
+      panel.setAttribute('aria-hidden','false');
+
+      // focus management
+      // focus first menu item after animation
+      setTimeout(()=> {
+        const first = panel.querySelector('.menu-item');
+        if(first) first.focus();
+        document.body.style.overflow = 'hidden'; // prevent background scroll while open
+      }, 380);
+      // trap focus simple: listen for escape
+      document.addEventListener('keydown', onKey);
+    }
+
+    function closeMenu(){
+      open=false;
+      btn.classList.remove('open');
+      btn.setAttribute('aria-expanded','false');
+      panel.classList.remove('open');
+      panel.setAttribute('aria-hidden','true');
+      document.body.style.overflow = ''; 
+      document.removeEventListener('keydown', onKey);
+    }
+
+    function toggle(){
+      if(open) closeMenu(); else openMenu();
+    }
+
+    function onKey(e){
+      if(e.key === 'Escape') closeMenu();
+    }
+
+    // Click handlers
+    btn.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      toggle();
+    });
+
+    // close when clicking outside the inner menu when open
+    document.addEventListener('click', (e)=>{
+      if(!open) return;
+      const inside = e.composedPath().includes(panel) || e.composedPath().includes(btn);
+      if(!inside) closeMenu();
+    });
+
+    // keyboard accessibility: Enter/Space toggles
+    btn.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+    });
+
+    // also close when any menu link clicked (for single-page nav)
+    panel.querySelectorAll('.menu-item').forEach(a=>{
+      a.addEventListener('click', (ev)=>{
+        // let natural nav happen then close
+        setTimeout(closeMenu, 180);
+      });
+    });
+  })();
+</script>
+
+</body>
+  </html>
