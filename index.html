@@ -4,325 +4,446 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>MR HESHAN OFC / TECH-WEB</title>
-
 <style>
-/* ————————————— ROOT THEME ————————————— */
-:root{
-  --bg:#070709;
-  --muted:#bdbdd0;
-  --accent1:#ff3b6b;
-  --accent2:#7b5cff;
-  --accent3:#00e1ff;
-  --glass-border: rgba(255,255,255,0.05);
-}
+  :root{
+    --bg:#070709;
+    --muted:#bdbdd0;
+    --accent1:#ff3b6b;
+    --accent2:#7b5cff;
+    --accent3:#00e1ff;
+    --glass-border: rgba(255,255,255,0.04);
+    --card-w:360px;
+    --topbar-h:64px; /* keep in sync with topbar height */
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+    background:
+      radial-gradient(900px 500px at 10% 10%, rgba(123,92,255,0.06), transparent 6%),
+      radial-gradient(800px 500px at 90% 90%, rgba(0,225,255,0.04), transparent 8%),
+      var(--bg);
+    color:#f7f7fb;
+    -webkit-font-smoothing:antialiased;
+    display:flex;justify-content:center;padding:40px 18px;min-height:100vh;align-items:flex-start;
+  }
 
-/* ————————————— GLOBAL ————————————— */
-*{box-sizing:border-box}
-html,body{margin:0;padding:0;font-family:Inter,Arial;color:white;scroll-behavior:smooth}
-body{
-  background: radial-gradient(900px 500px at 20% 10%,rgba(123,92,255,.06),transparent),
-              radial-gradient(900px 600px at 80% 90%,rgba(0,225,255,.05),transparent),
-              var(--bg);
-  display:flex;flex-direction:column;align-items:center;padding:90px 12px 60px;
-}
+  /* TOP BAR */
+  .topbar{
+    position:fixed;top:14px;left:50%;transform:translateX(-50%);
+    height:var(--topbar-h);
+    width:clamp(320px,88vw,1200px);
+    display:flex;justify-content:space-between;align-items:center;padding:10px 12px;gap:12px;border-radius:12px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border:1px solid var(--glass-border);
+    backdrop-filter: blur(6px) saturate(120%);
+    box-shadow:0 8px 30px rgba(0,0,0,0.6);z-index:300;
+  }
+  .branding{display:flex;gap:12px;align-items:center;cursor:pointer}
+  .brand-avatar{width:40px;height:40px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,0.06)}
+  .brand-avatar img{width:100%;height:100%;object-fit:cover}
+  .brand-titles{display:flex;flex-direction:column}
+  .brand-title{font-weight:800;font-size:14px;background:linear-gradient(90deg,var(--accent1),var(--accent2));-webkit-background-clip:text;color:transparent}
+  .brand-sub{font-size:11px;color:var(--muted);margin-top:2px}
 
-/* ————————————— TOP BAR ————————————— */
-.topbar{
-  position:fixed;top:14px;left:50%;transform:translateX(-50%);
-  width:90%;max-width:1200px;
-  background:rgba(255,255,255,0.05);
-  border:1px solid var(--glass-border);backdrop-filter:blur(6px);
-  display:flex;justify-content:space-between;align-items:center;
-  padding:10px 14px;border-radius:12px;z-index:900;
-}
-.branding{display:flex;align-items:center;gap:10px;cursor:pointer}
-.brand-avatar{width:40px;height:40px;border-radius:50%;overflow:hidden}
-.brand-avatar img{width:100%;height:100%;object-fit:cover}
-.brand-title{
-  font-size:15px;font-weight:800;
-  background:linear-gradient(90deg,var(--accent1),var(--accent2));-webkit-background-clip:text;color:transparent;
-}
-.brand-sub{font-size:11px;color:var(--muted)}
-.menu-btn{width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,0.05);border:none;cursor:pointer;position:relative}
-.hamburger{width:22px;height:18px;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
-.bar{position:absolute;width:100%;height:2px;background:linear-gradient(90deg,var(--accent2),var(--accent3));transition:.4s}
-.b1{top:0}.b2{top:8px}.b3{top:16px}
-.menu-btn.open .b1{transform:translateY(8px) rotate(45deg)}
-.menu-btn.open .b2{opacity:0}
-.menu-btn.open .b3{transform:translateY(-8px) rotate(-45deg)}
+  .controls{display:flex;align-items:center;gap:10px}
 
-/* ————————————— MAIN HOME CARD ————————————— */
-.main-card{
-  width:360px;max-width:92vw;
-  background:rgba(255,255,255,0.04);
-  border-radius:14px;border:1px solid var(--glass-border);
-  backdrop-filter:blur(8px);
-  padding:20px;margin-top:20px;
-  display:flex;flex-direction:column;align-items:center;gap:12px;
-}
-.profile-ring{
-  width:180px;height:180px;display:grid;place-items:center;position:relative;
-}
-.ring{
-  position:absolute;inset:0;border-radius:50%;
-  background:conic-gradient(var(--accent1),var(--accent2),var(--accent3),var(--accent1));
-  padding:4px;
-  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 16px),black 0);
-  animation:spin 6s linear infinite;
-}
-@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
-.profile-pic{width:120px;height:120px;border-radius:50%;border:5px solid #000;object-fit:cover}
+  /* hamburger */
+  .menu-btn{--size:44px;width:var(--size);height:var(--size);border-radius:10px;display:grid;place-items:center;position:relative;cursor:pointer;border:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.12));transition:transform .15s}
+  .menu-btn:active{transform:scale(.98)}
+  .hamburger{width:22px;height:18px;position:relative}
+  .bar{position:absolute;left:0;right:0;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--accent1),var(--accent3));transition:transform .45s cubic-bezier(.2,.85,.2,1),opacity .2s}
+  .b1{top:0}.b2{top:8px}.b3{top:16px}
+  .menu-btn.open .b1{transform:translateY(8px) rotate(45deg)} .menu-btn.open .b2{opacity:0;transform:scaleX(.2)} .menu-btn.open .b3{transform:translateY(-8px) rotate(-45deg)}
 
-.subtitle{color:var(--muted);font-size:13px;text-align:center}
-.btns{width:100%;display:flex;flex-direction:column;gap:10px;margin-top:6px}
-.btns a{
-  background:linear-gradient(90deg,var(--accent3),var(--accent2));
-  padding:12px;text-align:center;color:#071426;
-  border-radius:10px;font-weight:700;text-decoration:none;
-}
-.typing{color:var(--muted);min-height:40px;font-size:14px;text-align:center}
+  /* MAIN CARD */
+  .main-card{width:var(--card-w);max-width:92vw;margin-top:110px;padding:20px;border-radius:14px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid var(--glass-border);box-shadow:0 10px 40px rgba(0,0,0,0.6);display:flex;flex-direction:column;align-items:center;gap:12px;backdrop-filter: blur(8px) saturate(120%);}
+  /* RING: thinner band */
+  .profile-ring{width:220px;height:220px;display:grid;place-items:center;position:relative;margin-top:6px}
+  .ring{position:absolute;inset:0;border-radius:50%;padding:5px;background:conic-gradient(from 120deg,var(--accent1),var(--accent2),var(--accent3),var(--accent1));-webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 20px), black calc(100% - 20px));mask: radial-gradient(farthest-side, transparent calc(100% - 20px), black calc(100% - 20px));animation:spin 6s linear infinite;filter:drop-shadow(0 12px 40px rgba(0,0,0,0.6))}
+  @keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+  .profile-pic{width:150px;height:150px;border-radius:50%;object-fit:cover;border:6px solid rgba(10,10,10,0.75);z-index:2;background:linear-gradient(180deg,#111,#0b0b0b)}
+  h1{margin:6px 0 0 0;font-size:20px;text-align:center}
+  .subtitle{color:var(--muted);font-size:13px;text-align:center;margin-top:6px}
+  .btns{width:100%;display:flex;flex-direction:column;gap:10px;margin-top:6px}
+  .btns a{display:inline-flex;justify-content:center;align-items:center;padding:11px;border-radius:10px;text-decoration:none;font-weight:700;color:#071426;background:linear-gradient(90deg,var(--accent3),var(--accent2));box-shadow:0 6px 20px rgba(0,0,0,0.4)}
+  .typing{margin-top:12px;font-size:14px;color:var(--muted);background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.02);text-align:center;min-height:64px}
 
-/* ————————————— PAGE SECTIONS ————————————— */
-.content-section{
-  width:100%;max-width:720px;padding:20px;margin-top:25px;
-  background:rgba(255,255,255,0.04);
-  border-radius:14px;border:1px solid var(--glass-border);
-  backdrop-filter:blur(8px);
-}
-.section-title{font-weight:800;font-size:18px;margin-bottom:10px}
-.about-body{font-size:15px;color:var(--muted);line-height:1.6}
+  /* MENU PANEL & CIRCULAR REVEAL */
+  .menu-panel{position:fixed;top:10px;right:10px;width:360px;height:360px;pointer-events:none;z-index:250;display:grid;place-items:center;transition:opacity .4s ease}
+  .mask{position:absolute;right:12px;top:12px;width:56px;height:56px;border-radius:50%;background:radial-gradient(circle at 40% 30%, rgba(255,255,255,0.05), rgba(255,255,255,0.02));box-shadow:0 8px 30px rgba(0,0,0,0.45);transition:width .64s cubic-bezier(.12,.82,.18,1),height .64s cubic-bezier(.12,.82,.18,1);pointer-events:auto}
+  .panel{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;pointer-events:none}
+  .menu-inner{width:320px;max-width:92vw;padding:20px;border-radius:14px;backdrop-filter: blur(8px) saturate(130%);background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));border:1px solid var(--glass-border);box-shadow:0 18px 50px rgba(0,0,0,0.6);opacity:0;transform:translateY(6px) scale(.98);transition:opacity .42s ease .06s, transform .42s cubic-bezier(.2,.9,.2,1) .06s;pointer-events:auto;overflow:hidden}
+  /* when we want to push content below the topbar, add padding-top */
+  .menu-inner.shifted{padding-top:calc(var(--topbar-h) + 8px)} /* this keeps profile content visible below the top bar */
+  .menu-inner .top-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .menu-inner nav{display:flex;flex-direction:column;gap:12px}
+  .menu-item{color:var(--muted);font-weight:700;font-size:16px;text-decoration:none;display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:8px;transition:transform .25s ease,background .18s}
+  .menu-item:hover{transform:translateX(6px);background:rgba(255,255,255,0.02)}
+  .social-row{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap}
+  .social-link{padding:8px 10px;border-radius:8px;background:linear-gradient(90deg,var(--accent3),var(--accent2));color:#071426;font-weight:800;text-decoration:none}
 
-/* PROFILE SECTION */
-.profile-grid{display:flex;gap:18px}
-.profile-side img{width:100px;height:100px;border-radius:12px;object-fit:cover;border:2px solid rgba(255,255,255,0.1)}
-.profile-details{flex:1}
-.skill-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.skill-name{width:90px;font-size:13px;color:var(--muted)}
-.skill-bar{flex:1;height:10px;background:rgba(255,255,255,0.08);border-radius:10px;overflow:hidden}
-.skill-fill{height:100%;width:0;background:linear-gradient(90deg,var(--accent1),var(--accent3));border-radius:10px;transition:.7s}
+  /* Profile card inside menu */
+  .profile-card{display:flex;gap:12px;align-items:center;padding:8px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));border:1px solid rgba(255,255,255,0.02)}
+  .menu-profile-pic{width:64px;height:64px;border-radius:10px;object-fit:cover;border:2px solid rgba(255,255,255,0.03)}
+  .profile-info{display:flex;flex-direction:column;gap:6px}
+  .profile-name{font-weight:800}
+  .profile-meta{font-size:12px;color:var(--muted)}
 
-/* ————————————— MENU PANEL ————————————— */
-.menu-panel{
-  display:none;
-  position:fixed;top:0;left:0;width:100%;height:100%;
-  backdrop-filter:blur(8px);background:rgba(0,0,0,0.55);
-  z-index:999;justify-content:center;align-items:center;
-}
-.menu-box{
-  width:330px;background:rgba(255,255,255,0.05);
-  border-radius:14px;border:1px solid var(--glass-border);
-  padding:20px;backdrop-filter:blur(6px);
-}
-.menu-item{
-  display:block;width:100%;padding:12px 10px;
-  background:rgba(255,255,255,0.06);
-  border-radius:10px;margin-bottom:10px;
-  text-decoration:none;color:white;font-weight:700;
-}
+  /* Skills bars */
+  .skills{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+  .skill-row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .skill-name{font-size:13px;color:var(--muted);width:80px}
+  .skill-bar{flex:1;height:8px;background:rgba(255,255,255,0.06);border-radius:8px;overflow:hidden}
+  .skill-fill{height:100%;border-radius:8px;background:linear-gradient(90deg,var(--accent1),var(--accent3));transform-origin:left;transition:width .6s cubic-bezier(.2,.85,.2,1)}
 
-/* ————————————— FOOTER ————————————— */
-.site-footer{
-  position:fixed;bottom:10px;left:50%;transform:translateX(-50%);
-  width:90%;max-width:900px;
-  background:rgba(255,255,255,0.05);
-  border:1px solid var(--glass-border);backdrop-filter:blur(6px);
-  padding:12px;border-radius:12px;
-  display:flex;justify-content:space-between;align-items:center;
-}
-.footer-links button{
-  background:none;border:none;color:var(--muted);
-  font-size:14px;font-weight:700;cursor:pointer;margin-right:10px;
-}
-.footer-social a{
-  padding:6px 10px;border-radius:8px;
-  background:linear-gradient(90deg,var(--accent3),var(--accent2));
-  color:#071426;font-weight:700;text-decoration:none;
-  margin-left:6px;
-}
+  /* About content */
+  .about-text{font-size:14px;color:var(--muted);line-height:1.45;min-height:88px}
+
+  /* OPEN STATE */
+  .menu-panel.open{pointer-events:auto;opacity:1}
+  .menu-panel.open .mask{width:1600px;height:1600px}
+  .menu-panel.open .menu-inner{opacity:1;transform:translateY(0) scale(1)}
+  .menu-panel.open .skill-fill{transition-delay:.28s}
+
+  /* WELCOME overlay */
+  .welcome-overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg, rgba(10,10,12,0.9), rgba(5,5,8,0.95));z-index:400;transition:opacity .45s ease,transform .45s ease}
+  .welcome-content{text-align:center;color:#fff;transform:translateY(0);transition:transform .45s cubic-bezier(.2,.9,.2,1)}
+  .welcome-logo{font-weight:900;font-size:48px;letter-spacing:6px;margin-bottom:8px;background:linear-gradient(90deg,var(--accent1),var(--accent2),var(--accent3));-webkit-background-clip:text;color:transparent;text-transform:uppercase}
+  .welcome-sub{color:var(--muted);margin-top:6px}
+  .welcome-overlay.hidden{opacity:0;pointer-events:none;transform:scale(.98)}
+
+  /* ephemeral topbar-click overlay */
+  .brand-anim-overlay{position:fixed;inset:0;z-index:500;pointer-events:none;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .45s, transform .45s}
+  .brand-anim-overlay.show{opacity:1;pointer-events:none}
+  .brand-anim-inner{width:80%;max-width:900px;height:260px;border-radius:16px;background:linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));backdrop-filter: blur(8px) saturate(120%);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;transform:translateY(0) scale(1);box-shadow:0 30px 80px rgba(0,0,0,0.6)}
+  .brand-anim-logo{font-weight:900;font-size:34px;background:linear-gradient(90deg,var(--accent1),var(--accent2));-webkit-background-clip:text;color:transparent;text-transform:uppercase}
+  .brand-anim-sub{color:var(--muted)}
+  @media (max-width:420px){:root{--card-w:340px} .welcome-logo{font-size:36px} .brand-anim-inner{height:180px}}
 </style>
 </head>
-
 <body>
 
-<!-- ————————————— TOP BAR ————————————— -->
-<div class="topbar">
-  <div class="branding" onclick="scrollToHome()">
-    <div class="brand-avatar"><img src="https://files.catbox.moe/nhrp9a.jpg"></div>
-    <div>
-      <div class="brand-title">MR HESHAN OFC / TECH-WEB</div>
-      <div class="brand-sub">Full-Stack • UI/UX • Dev</div>
+  <!-- Welcome overlay -->
+  <div id="welcome" class="welcome-overlay" aria-hidden="false">
+    <div class="welcome-content" role="dialog" aria-label="Welcome">
+      <div class="welcome-logo">WELCOME</div>
+      <div class="welcome-sub">MR HESHAN OFC / TECH-WEB</div>
     </div>
   </div>
 
-  <button id="menuBtn" class="menu-btn">
-    <div class="hamburger">
-      <span class="bar b1"></span><span class="bar b2"></span><span class="bar b3"></span>
-    </div>
-  </button>
-</div>
-
-<!-- ————————————— MAIN HOME ————————————— -->
-<div id="homeSection" class="main-card">
-  <div class="profile-ring">
-    <div class="ring"></div>
-    <img class="profile-pic" src="https://files.catbox.moe/nhrp9a.jpg">
-  </div>
-
-  <h2>MR HESHAN OFC / TECH-WEB</h2>
-  <div class="subtitle">Full-Stack Developer • UI/UX Designer • Tech Enthusiast</div>
-
-  <div class="btns">
-    <a href="https://wa.me/94719845166">WhatsApp</a>
-    <a href="https://youtube.com/@heshan_dh?si=7FTKlwZuo3_nU4Ss">YouTube</a>
-    <a href="https://t.me/94719845166">Telegram</a>
-  </div>
-
-  <div id="typing" class="typing"></div>
-</div>
-
-<!-- ————————————— ABOUT SECTION ————————————— -->
-<div id="aboutSection" class="content-section">
-  <div class="section-title">About Me</div>
-  <div id="aboutBody" class="about-body"></div>
-</div>
-
-<!-- ————————————— PROFILE SECTION ————————————— -->
-<div id="profileSection" class="content-section">
-  <div class="section-title">Profile</div>
-
-  <div class="profile-grid">
-    <div class="profile-side">
-      <img src="https://files.catbox.moe/nhrp9a.jpg">
-      <div style="font-weight:700;margin-top:6px">Dinidu Heshan</div>
-      <div style="font-size:13px;color:var(--muted)">Age: 18 • Embilipitiya</div>
-    </div>
-
-    <div class="profile-details">
-      <div style="font-weight:700">Skills</div>
-
-      <div class="skill-row">
-        <div class="skill-name">HTML/CSS</div>
-        <div class="skill-bar"><div class="skill-fill" data-pct="94"></div></div>
-      </div>
-
-      <div class="skill-row">
-        <div class="skill-name">JavaScript</div>
-        <div class="skill-bar"><div class="skill-fill" data-pct="87"></div></div>
-      </div>
-
-      <div class="skill-row">
-        <div class="skill-name">React</div>
-        <div class="skill-bar"><div class="skill-fill" data-pct="78"></div></div>
-      </div>
-
-      <div class="skill-row">
-        <div class="skill-name">UI / UX</div>
-        <div class="skill-bar"><div class="skill-fill" data-pct="69"></div></div>
-      </div>
+  <!-- Transient overlay shown when topbar clicked -->
+  <div id="brandOverlay" class="brand-anim-overlay" aria-hidden="true">
+    <div class="brand-anim-inner" role="status" aria-live="polite">
+      <div class="brand-anim-logo">MR HESHAN OFC</div>
+      <div class="brand-anim-sub">Tech · Web · Design</div>
     </div>
   </div>
-</div>
 
-<!-- ————————————— MENU ————————————— -->
-<div id="menuPanel" class="menu-panel">
-  <div class="menu-box">
-    <a class="menu-item" onclick="openHome()">Home</a>
-    <a class="menu-item" onclick="openAbout()">About</a>
-    <a class="menu-item" onclick="openProfile()">Profile</a>
-    <a class="menu-item" href="https://youtube.com/@heshan_dh">YouTube</a>
+  <!-- Topbar -->
+  <header class="topbar" role="banner">
+    <div id="brand" class="branding" title="MR HESHAN OFC / TECH-WEB">
+      <div class="brand-avatar"><img src="https://files.catbox.moe/nhrp9a.jpg" alt="avatar"></div>
+      <div class="brand-titles">
+        <div class="brand-title">MR HESHAN OFC / TECH-WEB</div>
+        <div class="brand-sub">Full-Stack · UI/UX · Dev</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button id="menuBtn" class="menu-btn" aria-expanded="false" aria-controls="mainMenu" aria-label="Open menu">
+        <span class="hamburger" aria-hidden="true">
+          <span class="bar b1"></span>
+          <span class="bar b2"></span>
+          <span class="bar b3"></span>
+        </span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main profile card -->
+  <main id="homeTarget" class="main-card" role="main" aria-labelledby="profileName">
+    <div class="profile-ring">
+      <div class="ring" aria-hidden="true"></div>
+      <img class="profile-pic" src="https://files.catbox.moe/nhrp9a.jpg" alt="profile photo">
+    </div>
+    <h1 id="profileName">MR HESHAN OFC / TECH-WEB</h1>
+    <div class="subtitle">Full-Stack Developer · UI/UX Designer · Tech Enthusiast</div>
+
+    <div class="btns" role="navigation" aria-label="Quick links">
+      <a href="https://wa.me/94719845166" target="_blank" rel="noopener">WhatsApp</a>
+      <a href="https://youtube.com/@heshan_dh?si=7FTKlwZuo3_nU4Ss" target="_blank" rel="noopener">YouTube</a>
+      <a href="https://t.me/94719845166" target="_blank" rel="noopener">Telegram</a>
+    </div>
+
+    <div class="typing" id="typing" aria-live="polite"></div>
+  </main>
+
+  <!-- Glass menu with circular reveal -->
+  <div id="mainMenu" class="menu-panel" aria-hidden="true">
+    <div id="mask" class="mask" aria-hidden="true"></div>
+    <div class="panel" role="dialog" aria-label="Main Menu">
+      <div class="menu-inner" id="menuInner" role="menu" aria-labelledby="menuBtn">
+
+        <!-- top row: small profile area (dynamic) -->
+        <div class="top-row" id="menuTopRow"></div>
+
+        <!-- dynamic content area -->
+        <div id="menuContent">
+          <nav>
+            <a href="#home" class="menu-item" data-target="home">Home</a>
+            <a href="#about" class="menu-item" data-target="about">About</a>
+            <a href="#profile" class="menu-item" data-target="profile">Profile</a>
+            <a href="#social" class="menu-item" data-target="social">Social Media</a>
+          </nav>
+
+          <div class="social-row" style="margin-top:10px">
+            <a class="social-link" href="https://www.facebook.com/share/16vrFNkC8T/" target="_blank" rel="noopener">Facebook</a>
+            <a class="social-link" href="https://vt.tiktok.com/ZSyEs3qbT/" target="_blank" rel="noopener">TikTok</a>
+            <a class="social-link" href="https://youtube.com/@heshan_dh?si=7FTKlwZuo3_nU4Ss" target="_blank" rel="noopener">YouTube</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
   </div>
-</div>
 
-<!-- ————————————— FOOTER ————————————— -->
-<div class="site-footer">
-  <div class="footer-links">
-    <button id="footerHome">Home</button>
-    <button id="footerAbout">About</button>
-    <button id="footerProfile">Profile</button>
-  </div>
-
-  <div class="footer-social">
-    <a href="https://www.facebook.com/share/16vrFNkC8T/">FB</a>
-    <a href="https://vt.tiktok.com/ZSyEs3qbT/">TT</a>
-    <a href="https://youtube.com/@heshan_dh">YT</a>
-  </div>
-</div>
-
-<!-- ————————————— SCRIPTS ————————————— -->
 <script>
-/* ——— HOME TYPING ——— */
-const lines=[
- "Name: Dinidu Heshan",
- "නම: දිනිදු හේෂාන්",
- "From: Embilipitiya✨",
- "Age: 18",
- "Full‑Stack Developer"
-];
-let li=0,ci=0;
-function typeLoop(){
- let el=document.getElementById("typing");
- let txt=lines[li];
- el.textContent=txt.substring(0,ci);
- if(ci<txt.length){ci++;setTimeout(typeLoop,60)}
- else{ci=0;li=(li+1)%lines.length;setTimeout(typeLoop,700)}
-}
-setTimeout(typeLoop,600);
+/* Typing effect for main card (unchanged) */
+(function(){
+  const lines = [
+    "Name: Dinidu Heshan",
+    "නම : දිනිදු හේෂාන්🧚‍♂️",
+    "From: Embilipitiya✨",
+    "නගරය: ඇඹිලිපිටිය💐",
+    "Age: 18 🕊️",
+    "වයස: 18"
+  ];
+  let li=0, ci=0;
+  const el=document.getElementById('typing');
+  const speed=60;
+  function type(){
+    const cur=lines[li];
+    el.textContent = cur.substring(0, ci);
+    if(ci < cur.length){ ci++; setTimeout(type, speed); }
+    else { ci=0; li=(li+1)%lines.length; setTimeout(type, 900); }
+  }
+  window.startTyping = type;
+})();
 
-/* ——— MENU CONTROL ——— */
-document.getElementById("menuBtn").onclick=()=>{
- document.getElementById("menuBtn").classList.toggle("open");
- document.getElementById("menuPanel").style.display=
-   document.getElementById("menuPanel").style.display==="flex"?"none":"flex";
-};
+/* Welcome overlay control */
+(function(){
+  const overlay = document.getElementById('welcome');
+  function hide(){
+    if(!overlay) return;
+    overlay.classList.add('hidden');
+    setTimeout(()=>{ overlay.style.display='none'; if(window.startTyping) startTyping(); }, 520);
+  }
+  window.addEventListener('load', ()=> setTimeout(hide, 1400));
+  setTimeout(hide, 4000);
+  overlay.addEventListener('click', hide);
+})();
 
-/* ——— SECTIONS SCROLL ——— */
-function scrollToHome(){
- document.getElementById("homeSection").scrollIntoView({behavior:"smooth"});
-}
-function openHome(){scrollToHome();closeMenu()}
-function openAbout(){document.getElementById("aboutSection").scrollIntoView({behavior:"smooth"});typeAbout();closeMenu()}
-function openProfile(){document.getElementById("profileSection").scrollIntoView({behavior:"smooth"});animateSkills();closeMenu()}
-function closeMenu(){
- document.getElementById("menuPanel").style.display="none";
- document.getElementById("menuBtn").classList.remove("open");
-}
+/* Brand/topbar click animation (dim background + show ephemeral animation) */
+(function(){
+  const brand = document.getElementById('brand');
+  const overlay = document.getElementById('brandOverlay');
+  let animing = false;
+  brand.addEventListener('click', (e)=>{
+    if(animing) return;
+    animing = true;
+    overlay.classList.add('show');
+    overlay.setAttribute('aria-hidden','false');
+    overlay.querySelector('.brand-anim-inner').animate([
+      { transform: 'scale(.98)', opacity: 0 },
+      { transform: 'scale(1)', opacity: 1 },
+      { transform: 'scale(1.02)', opacity: 1 },
+      { transform: 'scale(.99)', opacity: 0.96 }
+    ], { duration: 1100, easing: 'cubic-bezier(.2,.8,.2,1)'});
+    setTimeout(()=> {
+      overlay.classList.remove('show');
+      overlay.setAttribute('aria-hidden','true');
+      animing = false;
+    }, 1200);
+  });
+})();
 
-/* ——— FOOTER BUTTONS ——— */
-document.getElementById("footerHome").onclick=scrollToHome;
-document.getElementById("footerAbout").onclick=openAbout;
-document.getElementById("footerProfile").onclick=openProfile;
+/* MENU logic + dynamic content switching (Profile/About/Home) with About typing + padding fix */
+(function(){
+  const btn = document.getElementById('menuBtn');
+  const panel = document.getElementById('mainMenu');
+  const menuInner = document.getElementById('menuInner');
+  const mask = document.getElementById('mask');
+  const menuContent = document.getElementById('menuContent');
+  const menuTopRow = document.getElementById('menuTopRow');
+  const homeTarget = document.getElementById('homeTarget');
+  let open=false;
+  let aboutTypingTimer = null;
+  let aboutTypingCancel = false;
 
-/* ——— ABOUT TYPE EFFECT ——— */
-let aboutTyped=false;
-const aboutText="Hello — I'm Dinidu Heshan, an 18‑year‑old full‑stack developer and UI/UX designer from Embilipitiya. I create clean, modern web interfaces and high‑performance applications. I enjoy problem‑solving, UI/UX design, and exploring new web technologies. My focus is delivering fast, simple, user‑friendly experiences.";
-function typeAbout(){
- if(aboutTyped) return;
- aboutTyped=true;
- let el=document.getElementById("aboutBody");
- let i=0;
- function t(){el.textContent=aboutText.substring(0,i); i++; if(i<=aboutText.length) setTimeout(t,20);}
- t();
-}
+  const profileData = {
+    photo: 'https://files.catbox.moe/nhrp9a.jpg',
+    name: 'Dinidu Heshan',
+    age: '18',
+    location: 'Embilipitiya',
+    skills: [
+      {name:'HTML/CSS', pct:92},
+      {name:'JavaScript', pct:86},
+      {name:'React', pct:78},
+      {name:'UI/UX', pct:70}
+    ]
+  };
 
-/* ——— SKILLS ANIMATION ——— */
-let skillDone=false;
-function animateSkills(){
- if(skillDone) return;
- skillDone=true;
- document.querySelectorAll(".skill-fill").forEach((bar)=>{
-   let pct=bar.dataset.pct;
-   setTimeout(()=> bar.style.width=pct+"%",200);
- });
-}
+  function renderNav(){
+    // remove shifted mode so nav sits normally
+    menuInner.classList.remove('shifted');
+    menuTopRow.innerHTML = `<div style="font-weight:800">Menu</div><div style="font-size:12px;color:${getComputedStyle(document.documentElement).getPropertyValue('--muted')};">Quick links</div>`;
+    menuContent.innerHTML = `
+      <nav>
+        <a href="#home" class="menu-item" data-target="home">Home</a>
+        <a href="#about" class="menu-item" data-target="about">About</a>
+        <a href="#profile" class="menu-item" data-target="profile">Profile</a>
+        <a href="#social" class="menu-item" data-target="social">Social Media</a>
+      </nav>
+      <div class="social-row" style="margin-top:10px">
+        <a class="social-link" href="https://www.facebook.com/share/16vrFNkC8T/" target="_blank" rel="noopener">Facebook</a>
+        <a class="social-link" href="https://vt.tiktok.com/ZSyEs3qbT/" target="_blank" rel="noopener">TikTok</a>
+        <a class="social-link" href="https://youtube.com/@heshan_dh?si=7FTKlwZuo3_nU4Ss" target="_blank" rel="noopener">YouTube</a>
+      </div>`;
+    attachNavClicks();
+  }
 
-/* auto-run when scrolling */
-window.addEventListener("scroll",()=>{
- let aboutRect=document.getElementById("aboutSection").getBoundingClientRect();
- if(aboutRect.top<window.innerHeight-120) typeAbout();
+  function renderProfile(){
+    // For profile view we also apply shifted so the top-row sits below topbar visually
+    menuInner.classList.add('shifted');
+    menuTopRow.innerHTML = `
+      <div class="profile-card" style="width:100%">
+        <img class="menu-profile-pic" src="${profileData.photo}" alt="profile">
+        <div class="profile-info">
+          <div class="profile-name">${profileData.name}</div>
+          <div class="profile-meta">Age: ${profileData.age} · ${profileData.location}</div>
+        </div>
+      </div>
+    `;
+    // build skills list
+    let skillsHtml = `<div class="skills">`;
+    profileData.skills.forEach(s => {
+      skillsHtml += `
+        <div class="skill-row">
+          <div class="skill-name">${s.name}</div>
+          <div class="skill-bar"><div class="skill-fill" style="width:0%" data-pct="${s.pct}"></div></div>
+        </div>`;
+    });
+    skillsHtml += `</div>`;
+    menuContent.innerHTML = skillsHtml;
+    // animate fills
+    requestAnimationFrame(()=> {
+      const fills = menuContent.querySelectorAll('.skill-fill');
+      fills.forEach((f,i) => {
+        const p = f.getAttribute('data-pct') || 60;
+        setTimeout(()=> f.style.width = p + '%', 120 + i*80);
+      });
+    });
+  }
 
- let profRect=document.getElementById("profileSection").getBoundingClientRect();
- if(profRect.top<window.innerHeight-120) animateSkills();
-});
+  /* Typed About text */
+  function renderAbout(){
+    // make sure top content visible below topbar
+    menuInner.classList.add('shifted');
+    menuTopRow.innerHTML = `
+      <div class="profile-card" style="width:100%">
+        <img class="menu-profile-pic" src="${profileData.photo}" alt="profile">
+        <div class="profile-info">
+          <div class="profile-name">${profileData.name}</div>
+          <div class="profile-meta">Age: ${profileData.age} · ${profileData.location}</div>
+        </div>
+      </div>
+    `;
+
+    // set up placeholder where typing will happen
+    menuContent.innerHTML = `<div class="about-text" id="aboutText"></div>`;
+
+    // the professional about text (you can edit this)
+    const aboutString = "Hello — I'm " + profileData.name + ", an 18-year-old full-stack developer and UI/UX designer from " + profileData.location + ". I focus on building clean, responsive web interfaces and practical applications that deliver a smooth user experience. I enjoy solving problems with thoughtful design, optimizing performance, and learning modern web technologies. When I'm not coding I explore design trends and prototype user-centered interfaces.";
+
+    // start typing with cancellation safety
+    const target = document.getElementById('aboutText');
+    if(!target) return;
+    // cancel any previous typing
+    aboutTypingCancel = true;
+    if (aboutTypingTimer) { clearTimeout(aboutTypingTimer); aboutTypingTimer = null; }
+    // small delay then type
+    aboutTypingCancel = false;
+    target.textContent = '';
+    let idx = 0;
+    const speed = 18; // ms per char (faster for longer text)
+    function step(){
+      if(aboutTypingCancel) return;
+      target.textContent = aboutString.substring(0, idx);
+      idx++;
+      if(idx <= aboutString.length){
+        aboutTypingTimer = setTimeout(step, speed);
+      } else {
+        aboutTypingTimer = null;
+      }
+    }
+    // start after a small delay so the menu reveal animation finishes
+    aboutTypingTimer = setTimeout(step, 260);
+  }
+
+  /* attach clicks to nav links (delegated) */
+  function attachNavClicks(){
+    // ensure any previous listeners are effectively replaced by re-binding
+    menuContent.querySelectorAll('.menu-item').forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        e.preventDefault();
+        const target = a.getAttribute('data-target');
+        if(target === 'profile') { renderProfile(); }
+        else if(target === 'about') { renderAbout(); }
+        else if(target === 'home') {
+          closeMenu();
+          setTimeout(()=> homeTarget.scrollIntoView({behavior:'smooth', block:'center'}), 120);
+        }
+        else if(target === 'social') { renderNav(); }
+      });
+    });
+  }
+
+  /* open/close */
+  function openMenu(){
+    open=true; btn.classList.add('open'); panel.classList.add('open'); panel.setAttribute('aria-hidden','false'); btn.setAttribute('aria-expanded','true');
+    document.body.style.overflow='hidden';
+    renderNav();
+    setTimeout(()=> {
+      const first = panel.querySelector('.menu-item');
+      if(first) first.focus();
+    }, 380);
+    document.addEventListener('keydown', onKey);
+  }
+  function closeMenu(){
+    open=false; btn.classList.remove('open'); panel.classList.remove('open'); panel.setAttribute('aria-hidden','true'); btn.setAttribute('aria-expanded','false');
+    document.body.style.overflow='';
+    // cancel typing if running
+    aboutTypingCancel = true;
+    if (aboutTypingTimer){ clearTimeout(aboutTypingTimer); aboutTypingTimer = null; }
+    document.removeEventListener('keydown', onKey);
+  }
+  function toggle(){ if(open) closeMenu(); else openMenu(); }
+  function onKey(e){ if(e.key==='Escape') closeMenu(); }
+
+  btn.addEventListener('click', (e)=>{ e.stopPropagation(); toggle(); });
+  btn.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' ') { e.preventDefault(); toggle(); } });
+
+  // close when clicking outside
+  document.addEventListener('click', (e)=>{
+    if(!open) return;
+    const inside = e.composedPath().includes(panel) || e.composedPath().includes(btn);
+    if(!inside) closeMenu();
+  });
+
+  // init
+  renderNav();
+})();
 </script>
 
 </body>
