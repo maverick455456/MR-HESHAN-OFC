@@ -13,6 +13,7 @@
     --accent3:#00e1ff;
     --glass-border: rgba(255,255,255,0.04);
     --card-w:360px;
+    --topbar-h:64px; /* keep in sync with topbar height */
   }
   *{box-sizing:border-box}
   html,body{height:100%;margin:0}
@@ -30,6 +31,7 @@
   /* TOP BAR */
   .topbar{
     position:fixed;top:14px;left:50%;transform:translateX(-50%);
+    height:var(--topbar-h);
     width:clamp(320px,88vw,1200px);
     display:flex;justify-content:space-between;align-items:center;padding:10px 12px;gap:12px;border-radius:12px;
     background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
@@ -55,8 +57,8 @@
   .menu-btn.open .b1{transform:translateY(8px) rotate(45deg)} .menu-btn.open .b2{opacity:0;transform:scaleX(.2)} .menu-btn.open .b3{transform:translateY(-8px) rotate(-45deg)}
 
   /* MAIN CARD */
-  .main-card{width:var(--card-w);max-width:92vw;margin-top:90px;padding:20px;border-radius:14px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid var(--glass-border);box-shadow:0 10px 40px rgba(0,0,0,0.6);display:flex;flex-direction:column;align-items:center;gap:12px;backdrop-filter: blur(8px) saturate(120%);}
-  /* RING: made band thinner by reducing padding from 8px -> 5px */
+  .main-card{width:var(--card-w);max-width:92vw;margin-top:110px;padding:20px;border-radius:14px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid var(--glass-border);box-shadow:0 10px 40px rgba(0,0,0,0.6);display:flex;flex-direction:column;align-items:center;gap:12px;backdrop-filter: blur(8px) saturate(120%);}
+  /* RING: thinner band */
   .profile-ring{width:220px;height:220px;display:grid;place-items:center;position:relative;margin-top:6px}
   .ring{position:absolute;inset:0;border-radius:50%;padding:5px;background:conic-gradient(from 120deg,var(--accent1),var(--accent2),var(--accent3),var(--accent1));-webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 20px), black calc(100% - 20px));mask: radial-gradient(farthest-side, transparent calc(100% - 20px), black calc(100% - 20px));animation:spin 6s linear infinite;filter:drop-shadow(0 12px 40px rgba(0,0,0,0.6))}
   @keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
@@ -72,6 +74,8 @@
   .mask{position:absolute;right:12px;top:12px;width:56px;height:56px;border-radius:50%;background:radial-gradient(circle at 40% 30%, rgba(255,255,255,0.05), rgba(255,255,255,0.02));box-shadow:0 8px 30px rgba(0,0,0,0.45);transition:width .64s cubic-bezier(.12,.82,.18,1),height .64s cubic-bezier(.12,.82,.18,1);pointer-events:auto}
   .panel{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;pointer-events:none}
   .menu-inner{width:320px;max-width:92vw;padding:20px;border-radius:14px;backdrop-filter: blur(8px) saturate(130%);background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));border:1px solid var(--glass-border);box-shadow:0 18px 50px rgba(0,0,0,0.6);opacity:0;transform:translateY(6px) scale(.98);transition:opacity .42s ease .06s, transform .42s cubic-bezier(.2,.9,.2,1) .06s;pointer-events:auto;overflow:hidden}
+  /* when we want to push content below the topbar, add padding-top */
+  .menu-inner.shifted{padding-top:calc(var(--topbar-h) + 8px)} /* this keeps profile content visible below the top bar */
   .menu-inner .top-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
   .menu-inner nav{display:flex;flex-direction:column;gap:12px}
   .menu-item{color:var(--muted);font-weight:700;font-size:16px;text-decoration:none;display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:8px;transition:transform .25s ease,background .18s}
@@ -94,21 +98,13 @@
   .skill-fill{height:100%;border-radius:8px;background:linear-gradient(90deg,var(--accent1),var(--accent3));transform-origin:left;transition:width .6s cubic-bezier(.2,.85,.2,1)}
 
   /* About content */
-  .about-text{font-size:14px;color:var(--muted);line-height:1.45}
+  .about-text{font-size:14px;color:var(--muted);line-height:1.45;min-height:88px}
 
   /* OPEN STATE */
   .menu-panel.open{pointer-events:auto;opacity:1}
   .menu-panel.open .mask{width:1600px;height:1600px}
   .menu-panel.open .menu-inner{opacity:1;transform:translateY(0) scale(1)}
   .menu-panel.open .skill-fill{transition-delay:.28s}
-
-  /* item animation */
-  .menu-inner nav a{opacity:0;transform:translateY(8px)}
-  .menu-panel.open .menu-inner nav a{opacity:1;transform:none}
-  .menu-inner nav a:nth-child(1){transition:all .35s ease .14s}
-  .menu-inner nav a:nth-child(2){transition:all .35s ease .22s}
-  .menu-inner nav a:nth-child(3){transition:all .35s ease .30s}
-  .menu-inner nav a:nth-child(4){transition:all .35s ease .38s}
 
   /* WELCOME overlay */
   .welcome-overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg, rgba(10,10,12,0.9), rgba(5,5,8,0.95));z-index:400;transition:opacity .45s ease,transform .45s ease}
@@ -123,7 +119,6 @@
   .brand-anim-inner{width:80%;max-width:900px;height:260px;border-radius:16px;background:linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));backdrop-filter: blur(8px) saturate(120%);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;transform:translateY(0) scale(1);box-shadow:0 30px 80px rgba(0,0,0,0.6)}
   .brand-anim-logo{font-weight:900;font-size:34px;background:linear-gradient(90deg,var(--accent1),var(--accent2));-webkit-background-clip:text;color:transparent;text-transform:uppercase}
   .brand-anim-sub{color:var(--muted)}
-
   @media (max-width:420px){:root{--card-w:340px} .welcome-logo{font-size:36px} .brand-anim-inner{height:180px}}
 </style>
 </head>
@@ -196,7 +191,7 @@
         <!-- dynamic content area -->
         <div id="menuContent">
           <nav>
-            <a href="#home" class="menu-item" data-target="nav">Home</a>
+            <a href="#home" class="menu-item" data-target="home">Home</a>
             <a href="#about" class="menu-item" data-target="about">About</a>
             <a href="#profile" class="menu-item" data-target="profile">Profile</a>
             <a href="#social" class="menu-item" data-target="social">Social Media</a>
@@ -214,7 +209,7 @@
   </div>
 
 <script>
-/* Typing effect */
+/* Typing effect for main card (unchanged) */
 (function(){
   const lines = [
     "Name: Dinidu Heshan",
@@ -259,14 +254,12 @@
     animing = true;
     overlay.classList.add('show');
     overlay.setAttribute('aria-hidden','false');
-    // small scale/pulse animation via inline styles
     overlay.querySelector('.brand-anim-inner').animate([
       { transform: 'scale(.98)', opacity: 0 },
       { transform: 'scale(1)', opacity: 1 },
       { transform: 'scale(1.02)', opacity: 1 },
       { transform: 'scale(.99)', opacity: 0.96 }
     ], { duration: 1100, easing: 'cubic-bezier(.2,.8,.2,1)'});
-    // hide after 1.2s
     setTimeout(()=> {
       overlay.classList.remove('show');
       overlay.setAttribute('aria-hidden','true');
@@ -275,7 +268,7 @@
   });
 })();
 
-/* MENU logic + dynamic content switching (Profile/About/Home) */
+/* MENU logic + dynamic content switching (Profile/About/Home) with About typing + padding fix */
 (function(){
   const btn = document.getElementById('menuBtn');
   const panel = document.getElementById('mainMenu');
@@ -285,6 +278,8 @@
   const menuTopRow = document.getElementById('menuTopRow');
   const homeTarget = document.getElementById('homeTarget');
   let open=false;
+  let aboutTypingTimer = null;
+  let aboutTypingCancel = false;
 
   const profileData = {
     photo: 'https://files.catbox.moe/nhrp9a.jpg',
@@ -300,6 +295,8 @@
   };
 
   function renderNav(){
+    // remove shifted mode so nav sits normally
+    menuInner.classList.remove('shifted');
     menuTopRow.innerHTML = `<div style="font-weight:800">Menu</div><div style="font-size:12px;color:${getComputedStyle(document.documentElement).getPropertyValue('--muted')};">Quick links</div>`;
     menuContent.innerHTML = `
       <nav>
@@ -317,6 +314,8 @@
   }
 
   function renderProfile(){
+    // For profile view we also apply shifted so the top-row sits below topbar visually
+    menuInner.classList.add('shifted');
     menuTopRow.innerHTML = `
       <div class="profile-card" style="width:100%">
         <img class="menu-profile-pic" src="${profileData.photo}" alt="profile">
@@ -347,7 +346,10 @@
     });
   }
 
+  /* Typed About text */
   function renderAbout(){
+    // make sure top content visible below topbar
+    menuInner.classList.add('shifted');
     menuTopRow.innerHTML = `
       <div class="profile-card" style="width:100%">
         <img class="menu-profile-pic" src="${profileData.photo}" alt="profile">
@@ -357,16 +359,41 @@
         </div>
       </div>
     `;
-    // professional about text in English
-    menuContent.innerHTML = `
-      <div class="about-text">
-        Hello — I'm <strong>${profileData.name}</strong>, an 18-year-old full-stack developer and UI/UX designer from ${profileData.location}. I focus on building clean, responsive web interfaces and practical applications that deliver a smooth user experience. I enjoy solving problems with thoughtful design, optimizing performance, and learning modern web technologies. When I'm not coding I explore design trends and prototype user-centered interfaces.
-      </div>
-    `;
+
+    // set up placeholder where typing will happen
+    menuContent.innerHTML = `<div class="about-text" id="aboutText"></div>`;
+
+    // the professional about text (you can edit this)
+    const aboutString = "Hello — I'm " + profileData.name + ", an 18-year-old full-stack developer and UI/UX designer from " + profileData.location + ". I focus on building clean, responsive web interfaces and practical applications that deliver a smooth user experience. I enjoy solving problems with thoughtful design, optimizing performance, and learning modern web technologies. When I'm not coding I explore design trends and prototype user-centered interfaces.";
+
+    // start typing with cancellation safety
+    const target = document.getElementById('aboutText');
+    if(!target) return;
+    // cancel any previous typing
+    aboutTypingCancel = true;
+    if (aboutTypingTimer) { clearTimeout(aboutTypingTimer); aboutTypingTimer = null; }
+    // small delay then type
+    aboutTypingCancel = false;
+    target.textContent = '';
+    let idx = 0;
+    const speed = 18; // ms per char (faster for longer text)
+    function step(){
+      if(aboutTypingCancel) return;
+      target.textContent = aboutString.substring(0, idx);
+      idx++;
+      if(idx <= aboutString.length){
+        aboutTypingTimer = setTimeout(step, speed);
+      } else {
+        aboutTypingTimer = null;
+      }
+    }
+    // start after a small delay so the menu reveal animation finishes
+    aboutTypingTimer = setTimeout(step, 260);
   }
 
   /* attach clicks to nav links (delegated) */
   function attachNavClicks(){
+    // ensure any previous listeners are effectively replaced by re-binding
     menuContent.querySelectorAll('.menu-item').forEach(a=>{
       a.addEventListener('click', (e)=>{
         e.preventDefault();
@@ -374,11 +401,10 @@
         if(target === 'profile') { renderProfile(); }
         else if(target === 'about') { renderAbout(); }
         else if(target === 'home') {
-          // scroll to main card and close
           closeMenu();
           setTimeout(()=> homeTarget.scrollIntoView({behavior:'smooth', block:'center'}), 120);
         }
-        else if(target === 'social') { renderNav(); /* social links visible */ }
+        else if(target === 'social') { renderNav(); }
       });
     });
   }
@@ -397,6 +423,9 @@
   function closeMenu(){
     open=false; btn.classList.remove('open'); panel.classList.remove('open'); panel.setAttribute('aria-hidden','true'); btn.setAttribute('aria-expanded','false');
     document.body.style.overflow='';
+    // cancel typing if running
+    aboutTypingCancel = true;
+    if (aboutTypingTimer){ clearTimeout(aboutTypingTimer); aboutTypingTimer = null; }
     document.removeEventListener('keydown', onKey);
   }
   function toggle(){ if(open) closeMenu(); else openMenu(); }
