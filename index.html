@@ -16,7 +16,7 @@
     --topbar-h:64px;
   }
   *{box-sizing:border-box}
-  html,body{height:100%;margin:0}
+  html,body{height:100%;margin:0;scroll-behavior:smooth}
   body{
     font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
     background:
@@ -27,20 +27,22 @@
     -webkit-font-smoothing:antialiased;
     display:flex;
     justify-content:center;
-    padding:40px 18px;
+    padding:0 18px;
     min-height:100vh;
     align-items:flex-start;
-    /* allow footer to be at bottom when content short */
     flex-direction:column;
+    gap:18px;
   }
 
-  /* container to center content while footer stays below */
   .page-inner{
     width:100%;
     max-width:960px;
     display:flex;
     flex-direction:column;
     align-items:center;
+    gap:18px;
+    /* ensure content sits below topbar so topbar doesn't overlap main photo */
+    padding-top: calc(var(--topbar-h) + 24px);
   }
 
   /* TOP BAR */
@@ -72,8 +74,19 @@
   .menu-btn.open .b1{transform:translateY(8px) rotate(45deg)} .menu-btn.open .b2{opacity:0;transform:scaleX(.2)} .menu-btn.open .b3{transform:translateY(-8px) rotate(-45deg)}
 
   /* MAIN CARD */
-  .main-card{width:var(--card-w);max-width:92vw;margin-top:110px;padding:20px;border-radius:14px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid var(--glass-border);box-shadow:0 10px 40px rgba(0,0,0,0.6);display:flex;flex-direction:column;align-items:center;gap:12px;backdrop-filter: blur(8px) saturate(120%);}
-  .profile-ring{width:220px;height:220px;display:grid;place-items:center;position:relative;margin-top:6px}
+  .main-card{
+    width:var(--card-w);
+    max-width:92vw;
+    margin:0; /* controlled by page-inner padding-top now */
+    padding:20px;border-radius:14px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border:1px solid var(--glass-border);
+    box-shadow:0 10px 40px rgba(0,0,0,0.6);
+    display:flex;flex-direction:column;align-items:center;gap:12px;backdrop-filter: blur(8px) saturate(120%);
+  }
+
+  /* Move profile ring slightly lower (more space above) */
+  .profile-ring{width:220px;height:220px;display:grid;place-items:center;position:relative;margin-top:18px}
   .ring{position:absolute;inset:0;border-radius:50%;padding:5px;background:conic-gradient(from 120deg,var(--accent1),var(--accent2),var(--accent3),var(--accent1));-webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 20px), black calc(100% - 20px));mask: radial-gradient(farthest-side, transparent calc(100% - 20px), black calc(100% - 20px));animation:spin 6s linear infinite;filter:drop-shadow(0 12px 40px rgba(0,0,0,0.6))}
   @keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
   .profile-pic{width:150px;height:150px;border-radius:50%;object-fit:cover;border:6px solid rgba(10,10,10,0.75);z-index:2;background:linear-gradient(180deg,#111,#0b0b0b)}
@@ -82,6 +95,24 @@
   .btns{width:100%;display:flex;flex-direction:column;gap:10px;margin-top:6px}
   .btns a{display:inline-flex;justify-content:center;align-items:center;padding:11px;border-radius:10px;text-decoration:none;font-weight:700;color:#071426;background:linear-gradient(90deg,var(--accent3),var(--accent2));box-shadow:0 6px 20px rgba(0,0,0,0.4)}
   .typing{margin-top:12px;font-size:14px;color:var(--muted);background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.02);text-align:center;min-height:64px}
+
+  /* SECTION STYLES */
+  section.content-section{width:100%;max-width:720px;padding:18px;border-radius:12px;background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid var(--glass-border);box-shadow:0 10px 40px rgba(0,0,0,0.5);backdrop-filter: blur(8px) saturate(120%);color:var(--muted)}
+  .section-title{font-weight:800;margin-bottom:10px;color:#fff}
+
+  /* ABOUT section */
+  .about-body{font-size:15px;line-height:1.6;color:var(--muted)}
+
+  /* PROFILE section */
+  .profile-grid{display:flex;gap:18px;align-items:flex-start}
+  .profile-side{width:120px;display:flex;flex-direction:column;align-items:center;gap:10px}
+  .profile-side img{width:100px;height:100px;border-radius:12px;object-fit:cover;border:3px solid rgba(255,255,255,0.04)}
+  .profile-details{flex:1}
+  .skills{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+  .skill-row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .skill-name{font-size:13px;color:var(--muted);width:100px}
+  .skill-bar{flex:1;height:10px;background:rgba(255,255,255,0.06);border-radius:999px;overflow:hidden}
+  .skill-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent1),var(--accent3));width:0%;transition:width .8s cubic-bezier(.2,.85,.2,1)}
 
   /* MENU PANEL & CIRCULAR REVEAL */
   .menu-panel{position:fixed;top:10px;right:10px;width:360px;height:360px;pointer-events:none;z-index:250;display:grid;place-items:center;transition:opacity .4s ease}
@@ -96,51 +127,14 @@
   .social-row{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap}
   .social-link{padding:8px 10px;border-radius:8px;background:linear-gradient(90deg,var(--accent3),var(--accent2));color:#071426;font-weight:800;text-decoration:none}
 
-  /* Profile card inside menu */
-  .profile-card{display:flex;gap:12px;align-items:center;padding:8px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));border:1px solid rgba(255,255,255,0.02)}
-  .menu-profile-pic{width:64px;height:64px;border-radius:10px;object-fit:cover;border:2px solid rgba(255,255,255,0.03)}
-  .profile-info{display:flex;flex-direction:column;gap:6px}
-  .profile-name{font-weight:800}
-  .profile-meta{font-size:12px;color:var(--muted)}
-
-  /* Skills bars */
-  .skills{display:flex;flex-direction:column;gap:8px;margin-top:8px}
-  .skill-row{display:flex;justify-content:space-between;align-items:center;gap:10px}
-  .skill-name{font-size:13px;color:var(--muted);width:80px}
-  .skill-bar{flex:1;height:8px;background:rgba(255,255,255,0.06);border-radius:8px;overflow:hidden}
-  .skill-fill{height:100%;border-radius:8px;background:linear-gradient(90deg,var(--accent1),var(--accent3));transform-origin:left;transition:width .6s cubic-bezier(.2,.85,.2,1)}
-
-  /* About content */
-  .about-text{font-size:14px;color:var(--muted);line-height:1.45;min-height:88px}
-
-  /* OPEN STATE */
-  .menu-panel.open{pointer-events:auto;opacity:1}
-  .menu-panel.open .mask{width:1600px;height:1600px}
-  .menu-panel.open .menu-inner{opacity:1;transform:translateY(0) scale(1)}
-  .menu-panel.open .skill-fill{transition-delay:.28s}
-
-  /* WELCOME overlay */
-  .welcome-overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg, rgba(10,10,12,0.9), rgba(5,5,8,0.95));z-index:400;transition:opacity .45s ease,transform .45s ease}
-  .welcome-content{text-align:center;color:#fff;transform:translateY(0);transition:transform .45s cubic-bezier(.2,.9,.2,1)}
-  .welcome-logo{font-weight:900;font-size:48px;letter-spacing:6px;margin-bottom:8px;background:linear-gradient(90deg,var(--accent1),var(--accent2),var(--accent3));-webkit-background-clip:text;color:transparent;text-transform:uppercase}
-  .welcome-sub{color:var(--muted);margin-top:6px}
-  .welcome-overlay.hidden{opacity:0;pointer-events:none;transform:scale(.98)}
-
-  /* ephemeral topbar-click overlay */
-  .brand-anim-overlay{position:fixed;inset:0;z-index:500;pointer-events:none;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .45s, transform .45s}
-  .brand-anim-overlay.show{opacity:1;pointer-events:none}
-  .brand-anim-inner{width:80%;max-width:900px;height:260px;border-radius:16px;background:linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));backdrop-filter: blur(8px) saturate(120%);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;transform:translateY(0) scale(1);box-shadow:0 30px 80px rgba(0,0,0,0.6)}
-  .brand-anim-logo{font-weight:900;font-size:34px;background:linear-gradient(90deg,var(--accent1),var(--accent2));-webkit-background-clip:text;color:transparent;text-transform:uppercase}
-  .brand-anim-sub{color:var(--muted)}
-
   /* FOOTER */
   .site-footer{
     width:100%;
     max-width:920px;
-    margin-top:32px;
-    margin-bottom:18px;
+    margin-top:6px;
+    margin-bottom:6px;
     border-radius:12px;
-    padding:14px 18px;
+    padding:12px 14px;
     display:flex;
     gap:12px;
     align-items:center;
@@ -153,34 +147,22 @@
   }
   .footer-left{display:flex;flex-direction:column;gap:6px}
   .footer-links{display:flex;gap:12px;flex-wrap:wrap}
-  .footer-links a{color:var(--muted);text-decoration:none;font-weight:700;font-size:14px}
+  .footer-links button{background:transparent;border:0;color:var(--muted);font-weight:700;font-size:14px;cursor:pointer;padding:6px;border-radius:6px}
+  .footer-links button:hover{background:rgba(255,255,255,0.02)}
   .footer-right{display:flex;align-items:center;gap:12px}
   .footer-social a{padding:8px 10px;border-radius:8px;background:linear-gradient(90deg,var(--accent3),var(--accent2));color:#071426;font-weight:800;text-decoration:none;margin-left:6px}
   .made{font-size:13px;color:var(--muted)}
-  @media (max-width:600px){
+  @media (max-width:760px){
+    .profile-grid{flex-direction:column;align-items:center}
+    .profile-side{width:100%;flex-direction:row;gap:12px}
+    .skill-name{width:90px}
     .site-footer{flex-direction:column;align-items:flex-start;padding:12px}
-    .footer-right{width:100%;justify-content:space-between}
   }
 </style>
 </head>
 <body>
 
   <div class="page-inner">
-    <!-- Welcome overlay -->
-    <div id="welcome" class="welcome-overlay" aria-hidden="false">
-      <div class="welcome-content" role="dialog" aria-label="Welcome">
-        <div class="welcome-logo">WELCOME</div>
-        <div class="welcome-sub">MR HESHAN OFC / TECH-WEB</div>
-      </div>
-    </div>
-
-    <!-- Transient overlay shown when topbar clicked -->
-    <div id="brandOverlay" class="brand-anim-overlay" aria-hidden="true">
-      <div class="brand-anim-inner" role="status" aria-live="polite">
-        <div class="brand-anim-logo">MR HESHAN OFC</div>
-        <div class="brand-anim-sub">Tech · Web · Design</div>
-      </div>
-    </div>
 
     <!-- Topbar -->
     <header class="topbar" role="banner">
@@ -203,7 +185,7 @@
       </div>
     </header>
 
-    <!-- Main profile card -->
+    <!-- Main profile card (Home) -->
     <main id="homeTarget" class="main-card" role="main" aria-labelledby="profileName">
       <div class="profile-ring">
         <div class="ring" aria-hidden="true"></div>
@@ -221,16 +203,43 @@
       <div class="typing" id="typing" aria-live="polite"></div>
     </main>
 
+    <!-- ABOUT section (page-level) -->
+    <section id="aboutSection" class="content-section" aria-labelledby="aboutTitle">
+      <div class="section-title" id="aboutTitle">About</div>
+      <div class="about-body" id="aboutBody"></div>
+    </section>
+
+    <!-- PROFILE section (page-level) -->
+    <section id="profileSection" class="content-section" aria-labelledby="profileTitle">
+      <div class="section-title" id="profileTitle">Profile</div>
+      <div class="profile-grid">
+        <div class="profile-side">
+          <img src="https://files.catbox.moe/nhrp9a.jpg" alt="Dinidu Heshan">
+          <div style="text-align:center">
+            <div style="font-weight:800;margin-top:6px">Dinidu Heshan</div>
+            <div style="font-size:13px;color:var(--muted)">Age: 18 · Embilipitiya</div>
+          </div>
+        </div>
+        <div class="profile-details">
+          <div style="font-weight:700;color:#fff">Skills</div>
+          <div class="skills" id="pageSkills">
+            <div class="skill-row"><div class="skill-name">HTML/CSS</div><div class="skill-bar"><div class="skill-fill" data-pct="92"></div></div></div>
+            <div class="skill-row"><div class="skill-name">JavaScript</div><div class="skill-bar"><div class="skill-fill" data-pct="86"></div></div></div>
+            <div class="skill-row"><div class="skill-name">React</div><div class="skill-bar"><div class="skill-fill" data-pct="78"></div></div></div>
+            <div class="skill-row"><div class="skill-name">UI/UX</div><div class="skill-bar"><div class="skill-fill" data-pct="70"></div></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Glass menu with circular reveal -->
     <div id="mainMenu" class="menu-panel" aria-hidden="true">
       <div id="mask" class="mask" aria-hidden="true"></div>
       <div class="panel" role="dialog" aria-label="Main Menu">
         <div class="menu-inner" id="menuInner" role="menu" aria-labelledby="menuBtn">
 
-          <!-- top row: small profile area (dynamic) -->
           <div class="top-row" id="menuTopRow"></div>
 
-          <!-- dynamic content area -->
           <div id="menuContent">
             <nav>
               <a href="#home" class="menu-item" data-target="home">Home</a>
@@ -254,15 +263,15 @@
     <footer class="site-footer" role="contentinfo">
       <div class="footer-left">
         <div style="font-weight:800">MR HESHAN OFC / TECH-WEB</div>
-        <div class="footer-links" aria-hidden="false">
-          <a href="#home" onclick="scrollToSection(event,'homeTarget')">Home</a>
-          <a href="#about" class="menu-item" data-target="about">About</a>
-          <a href="#profile" class="menu-item" data-target="profile">Profile</a>
+        <div class="footer-links">
+          <button id="footerHomeBtn">Home</button>
+          <button id="footerAboutBtn">About</button>
+          <button id="footerProfileBtn">Profile</button>
         </div>
       </div>
 
       <div class="footer-right">
-        <div class="made">©TECH-WEB<span id="year"></span></div>
+        <div class="made">©PROFILE-WEB <span id="year"></span></div>
         <div class="footer-social">
           <a class="social-link" href="https://www.facebook.com/share/16vrFNkC8T/" target="_blank" rel="noopener">FB</a>
           <a class="social-link" href="https://vt.tiktok.com/ZSyEs3qbT/" target="_blank" rel="noopener">TT</a>
@@ -274,10 +283,10 @@
   </div><!-- .page-inner -->
 
 <script>
-/* Set footer year */
+/* footer year */
 document.getElementById('year').textContent = new Date().getFullYear();
 
-/* Typing effect for main card */
+/* small main typing */
 (function(){
   const lines = [
     "Name: Dinidu Heshan",
@@ -296,58 +305,62 @@ document.getElementById('year').textContent = new Date().getFullYear();
     if(ci < cur.length){ ci++; setTimeout(type, speed); }
     else { ci=0; li=(li+1)%lines.length; setTimeout(type, 900); }
   }
-  window.startTyping = type;
+  setTimeout(type, 700);
 })();
 
-/* Welcome overlay control */
+/* Profile section skill animation on scroll into view */
 (function(){
-  const overlay = document.getElementById('welcome');
-  function hide(){
-    if(!overlay) return;
-    overlay.classList.add('hidden');
-    setTimeout(()=>{ overlay.style.display='none'; if(window.startTyping) startTyping(); }, 520);
+  const skillFills = document.querySelectorAll('#pageSkills .skill-fill');
+  let animated = false;
+  function animateSkills(){
+    if(animated) return;
+    const rect = document.getElementById('profileSection').getBoundingClientRect();
+    if(rect.top < window.innerHeight - 80){
+      animated = true;
+      skillFills.forEach((f,i)=>{
+        const pct = f.getAttribute('data-pct') || 60;
+        setTimeout(()=> f.style.width = pct + '%', 120 + i*80);
+      });
+    }
   }
-  window.addEventListener('load', ()=> setTimeout(hide, 1400));
-  setTimeout(hide, 4000);
-  overlay.addEventListener('click', hide);
+  window.addEventListener('scroll', animateSkills);
+  setTimeout(animateSkills, 300);
 })();
 
-/* Brand/topbar click animation (dim background + show ephemeral animation) */
+/* About typing for page-level About section */
 (function(){
-  const brand = document.getElementById('brand');
-  const overlay = document.getElementById('brandOverlay');
-  let animing = false;
-  brand.addEventListener('click', (e)=>{
-    if(animing) return;
-    animing = true;
-    overlay.classList.add('show');
-    overlay.setAttribute('aria-hidden','false');
-    overlay.querySelector('.brand-anim-inner').animate([
-      { transform: 'scale(.98)', opacity: 0 },
-      { transform: 'scale(1)', opacity: 1 },
-      { transform: 'scale(1.02)', opacity: 1 },
-      { transform: 'scale(.99)', opacity: 0.96 }
-    ], { duration: 1100, easing: 'cubic-bezier(.2,.8,.2,1)'});
-    setTimeout(()=> {
-      overlay.classList.remove('show');
-      overlay.setAttribute('aria-hidden','true');
-      animing = false;
-    }, 1200);
-  });
+  const aboutTarget = document.getElementById('aboutBody');
+  const aboutString = "Hello — I'm Dinidu Heshan, an 18-year-old full-stack developer and UI/UX designer from Embilipitiya. I focus on building clean, responsive web interfaces and practical applications that deliver a smooth user experience. I enjoy solving problems with thoughtful design, optimizing performance, and learning modern web technologies. When I'm not coding I explore design trends and prototype user-centered interfaces.";
+  let idx=0, timer=null, typed=false;
+  function typeAbout(){
+    if(typed) return;
+    typed = true;
+    idx=0;
+    aboutTarget.textContent = '';
+    function step(){
+      aboutTarget.textContent = aboutString.substring(0, idx);
+      idx++;
+      if(idx <= aboutString.length) timer = setTimeout(step, 18);
+    }
+    step();
+  }
+  function check(){
+    const rect = aboutTarget.getBoundingClientRect();
+    if(rect.top < window.innerHeight - 80) typeAbout();
+  }
+  window.addEventListener('scroll', check);
+  setTimeout(check, 300);
+  window.typeAboutNow = typeAbout;
 })();
 
-/* MENU logic + dynamic content switching (Profile/About/Home) with About typing + padding fix */
+/* MENU logic (keeps previous behaviour) */
 (function(){
   const btn = document.getElementById('menuBtn');
   const panel = document.getElementById('mainMenu');
   const menuInner = document.getElementById('menuInner');
-  const mask = document.getElementById('mask');
   const menuContent = document.getElementById('menuContent');
   const menuTopRow = document.getElementById('menuTopRow');
-  const homeTarget = document.getElementById('homeTarget');
-  let open=false;
-  let aboutTypingTimer = null;
-  let aboutTypingCancel = false;
+  let open=false, aboutTypingTimer=null, aboutTypingCancel=false;
 
   const profileData = {
     photo: 'https://files.catbox.moe/nhrp9a.jpg',
@@ -421,25 +434,20 @@ document.getElementById('year').textContent = new Date().getFullYear();
         </div>
       </div>
     `;
-    menuContent.innerHTML = `<div class="about-text" id="aboutText"></div>`;
+    menuContent.innerHTML = `<div class="about-text" id="menuAboutText"></div>`;
     const aboutString = "Hello — I'm " + profileData.name + ", an 18-year-old full-stack developer and UI/UX designer from " + profileData.location + ". I focus on building clean, responsive web interfaces and practical applications that deliver a smooth user experience. I enjoy solving problems with thoughtful design, optimizing performance, and learning modern web technologies. When I'm not coding I explore design trends and prototype user-centered interfaces.";
-    const target = document.getElementById('aboutText');
+    const target = document.getElementById('menuAboutText');
     if(!target) return;
     aboutTypingCancel = true;
     if (aboutTypingTimer) { clearTimeout(aboutTypingTimer); aboutTypingTimer = null; }
     aboutTypingCancel = false;
     target.textContent = '';
-    let idx = 0;
-    const speed = 18;
+    let idx = 0, speed = 18;
     function step(){
       if(aboutTypingCancel) return;
       target.textContent = aboutString.substring(0, idx);
       idx++;
-      if(idx <= aboutString.length){
-        aboutTypingTimer = setTimeout(step, speed);
-      } else {
-        aboutTypingTimer = null;
-      }
+      if(idx <= aboutString.length) aboutTypingTimer = setTimeout(step, speed);
     }
     aboutTypingTimer = setTimeout(step, 260);
   }
@@ -453,7 +461,7 @@ document.getElementById('year').textContent = new Date().getFullYear();
         else if(target === 'about') { renderAbout(); }
         else if(target === 'home') {
           closeMenu();
-          setTimeout(()=> homeTarget.scrollIntoView({behavior:'smooth', block:'center'}), 120);
+          setTimeout(()=> document.getElementById('homeTarget').scrollIntoView({behavior:'smooth', block:'center'}), 120);
         }
         else if(target === 'social') { renderNav(); }
       });
@@ -489,22 +497,25 @@ document.getElementById('year').textContent = new Date().getFullYear();
     if(!inside) closeMenu();
   });
 
-  // helper used by footer links
-  window.openMenuAndGo = function(key){
-    // open menu if closed
-    if(!open) openMenu();
-    // wait for open animation then trigger the view
+  // footer buttons -> page actions
+  document.getElementById('footerHomeBtn').addEventListener('click', function(){
+    document.getElementById('homeTarget').scrollIntoView({behavior:'smooth', block:'center'});
+  });
+  document.getElementById('footerAboutBtn').addEventListener('click', function(){
+    document.getElementById('aboutSection').scrollIntoView({behavior:'smooth', block:'center'});
+    // trigger page-level about typing
+    setTimeout(()=> { if(window.typeAboutNow) window.typeAboutNow(); }, 450);
+  });
+  document.getElementById('footerProfileBtn').addEventListener('click', function(){
+    document.getElementById('profileSection').scrollIntoView({behavior:'smooth', block:'center'});
+    // animate skills
     setTimeout(()=> {
-      if(key === 'about') renderAbout();
-      else if(key === 'profile') renderProfile();
-    }, 420);
-  };
-
-  window.scrollToSection = function(e, id){
-    e.preventDefault();
-    const target = document.getElementById(id);
-    if(target) target.scrollIntoView({behavior:'smooth', block:'center'});
-  };
+      document.querySelectorAll('#profileSection .skill-fill').forEach((f,i)=>{
+        const pct = f.getAttribute('data-pct') || 60;
+        f.style.width = pct + '%';
+      });
+    }, 350);
+  });
 
   // init
   renderNav();
@@ -512,4 +523,4 @@ document.getElementById('year').textContent = new Date().getFullYear();
 </script>
 
 </body>
-  </html>
+                                                                       </html>
