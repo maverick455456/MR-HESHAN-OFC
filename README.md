@@ -55,4 +55,4 @@ A passionate **Full Stack Developer + UI/UX Designer** creating smooth, fast & a
 
 ## 📁 Required Files (IMPORTANT)
 
-Make sure these files exist in your repo: https://github.com/moneyheistofc01-boop/MR-NTECH-VIBE.git
+Make sure these files exist in your repo:(https://my-web-eight-alpha.vercel.app/)
